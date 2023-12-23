@@ -1,0 +1,41 @@
+
+version: '2'
+
+services:
+  db:
+    image: mysql:8.2
+    restart: always
+    container_name: pybox-db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    expose:
+      - 3306
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+    healthcheck:
+      test: mysqladmin ping
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: pybox-web
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+        db:
+          # wait until MySQL is ready to accept connections
+          condition: service_healthy
+    env_file:
+      - .env
+
+volumes:
+  mysql_data:
+
+
+  
