@@ -1,12 +1,27 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+import importlib.util
 import os
 import sys
+
+from django.core.exceptions import ImproperlyConfigured
 
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pybox.settings')
+    django_env = os.environ.get('DJANGO_ENV', 'local')
+    
+    # check if the current environments settings module exists
+    env_settings_module = f'pybox.settings.{django_env}'
+    env_settings_module_found = importlib.util.find_spec(env_settings_module) is not None
+    
+    if env_settings_module_found:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', env_settings_module)
+    else:
+        raise ImproperlyConfigured(
+            f'Could not find settings module {env_settings_module}'
+        )
+    
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
