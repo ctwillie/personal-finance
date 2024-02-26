@@ -29,7 +29,6 @@ services:
       - "8000:8000"
     depends_on:
         db:
-          # wait until MySQL is ready to accept connections
           condition: service_healthy
     env_file:
       - .env

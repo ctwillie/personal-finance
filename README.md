@@ -1,5 +1,33 @@
-## Dockerizing Django
+## Todo
 
-- YT: https://www.youtube.com/watch?v=BoM-7VMdo7s
-- Docker Django samples: https://docs.docker.com/samples/django/
-- Docker/awesome-composer: https://github.com/docker/awesome-compose
+- [ ] Persist the access token on the item record
+    - [ ] Use the access token to make api requests
+
+
+## References
+
+- [Plaid API](https://plaid.com/docs/api/)
+- [Pattern - example project](https://github.com/plaid/pattern)
+
+
+## Database Seeding
+
+- To seed budget items and accounts:
+```bash
+python manage.py seeditemsandaccounts
+```
+
+- To seed budget categories:
+```bash
+python manage.py seedcategories
+```
+
+- To seed budget transactions:
+```bash
+python manage.py seedtransactions
+```
+
+- To update budget transactions:
+```bash
+python manage.py updatetransactions
+```
