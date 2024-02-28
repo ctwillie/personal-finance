@@ -72,6 +72,7 @@ class Command(BaseCommand):
                 Transaction.objects.update_or_create(
                     hash=self.generate_unique_hash(transaction["transaction_id"]),
                     defaults={
+                        "account": account,
                         "plaid_transaction_id": transaction["transaction_id"],
                         "category_id": category,
                         "description": transaction["name"],

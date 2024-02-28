@@ -8,7 +8,7 @@ def index(request):
 
 
 def transactions_index(request):
-    transactions = Transaction.objects.select_related("category").all()[:100]
+    transactions = Transaction.objects.select_related("category").order_by('-date').all()[:100]
 
     return render(
         request, "budget/transactions_index.html", {"transactions": transactions}
