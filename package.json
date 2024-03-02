@@ -1,0 +1,23 @@
+{
+  "name": "personal-finance",
+  "version": "1.0.0",
+  "description": "A personal finance application",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@inertiajs/react": "^1.0.15",
+    "@vitejs/plugin-react": "^4.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "styled-jsx": "^5.1.2",
+    "vite": "^5.1.4"
+  }
+}

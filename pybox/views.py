@@ -1,5 +1,6 @@
-from django.shortcuts import render
+# from django.shortcuts import render
+from inertia import render
 
 
 def index(request):
-    return render(request, 'home.html')
+    return render(request, 'Welcome')
