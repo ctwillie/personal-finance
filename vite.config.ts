@@ -53,11 +53,11 @@ export default defineConfig({
     },
   },
   resolve: {
-    extensions: [".js", ".json"],
+    extensions: [".js", ".ts", ".tsx", ".json"],
   },
   esbuild: {
-    loader: "jsx",
-    include: /src\/.*\.jsx?$/,
+    loader: "tsx",
+    include: /src\/.*\.tsx?$/,
     exclude: [],
   },
   build: {
@@ -69,7 +69,7 @@ export default defineConfig({
     rollupOptions: {
       // loader: { ".js": "jsx" },
       input: {
-        main: resolve("./static/src/js/main.jsx"),
+        main: resolve("./static/src/js/main.tsx"),
       },
       output: {
         // chunkFileNames: "chunks/[hash:25].js",

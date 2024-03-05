@@ -1,7 +1,22 @@
 import React from "react";
 
+type Transaction = {
+  id: number;
+  category: string;
+  amount: number;
+  description: string;
+  date: string;
+};
 
-export default function Transactions({ amountTotal, transactions }) {
+type TransactionsProps = {
+  amountTotal: number;
+  transactions: Transaction[];
+};
+
+export default function Transactions({
+  amountTotal,
+  transactions,
+}: TransactionsProps) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
