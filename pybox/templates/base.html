@@ -1,28 +1,28 @@
 {% load django_vite %}
-<!doctype html>
+<!DOCTYPE html>
 <html class="h-full">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script src="https://cdn.tailwindcss.com"></script>
-        <title>{% block title %}Pybox{% endblock %}</title>
-        {% vite_hmr_client %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{% block title %}Pybox{% endblock %}</title>
+    {% vite_hmr_client %}
 
-        <script type="module">
-            import RefreshRuntime from "http://localhost:3000/static/@react-refresh";
-            RefreshRuntime.injectIntoGlobalHook(window);
-            window.$RefreshReg$ = () => {};
-            window.$RefreshSig$ = () => (type) => type;
-            window.__vite_plugin_react_preamble_installed__ = true;
-        </script>
+    <script type="module">
+      import RefreshRuntime from "http://localhost:3000/static/@react-refresh";
+      RefreshRuntime.injectIntoGlobalHook(window);
+      window.$RefreshReg$ = () => {};
+      window.$RefreshSig$ = () => (type) => type;
+      window.__vite_plugin_react_preamble_installed__ = true;
+    </script>
 
-        {% vite_asset 'js/main.jsx' %}
-    </head>
+    {% vite_asset 'js/main.jsx' %}
+  </head>
 
-    <body class="h-screen w-screen">
-        <div class="container mx-auto pt-20">
-            <!-- {% block content %}{% endblock %} -->
-            {% block inertia %}{% endblock %}
-        </div>
-    </body>
+  <body class="h-screen w-screen">
+    <div class="container mx-auto pt-20">
+      <!-- {% block content %}{% endblock %} -->
+      {% block inertia %}{% endblock %}
+    </div>
+  </body>
 </html>
