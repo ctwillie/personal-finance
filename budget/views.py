@@ -1,3 +1,4 @@
+from datetime import date
 from inertia import inertia
 
 from budget.models import Transaction
@@ -6,6 +7,44 @@ from budget.models import Transaction
 @inertia("Budget/Index")
 def index(request):
     return {}
+
+
+@inertia("Budget/Dashboard")
+def dashboard(request):
+    today = date.today()
+    currentMonth = today.strftime("%B")
+    currentDate = today.strftime("%m/%d/%Y")
+
+    monthlyTransactions = Transaction.objects.filter(
+        date__year=today.year, date__month=today.month, amount__gt=0
+    )
+    totalSpent = sum([transaction.amount for transaction in monthlyTransactions])
+    greaterThan100 = monthlyTransactions.filter(amount__gt=100).count()
+    averageDailySpend = totalSpent / monthlyTransactions.count()
+
+    return {
+        "currentDate": currentDate,
+        "currentMonth": currentMonth,
+        "monthlyTransactions": monthlyTransactions,
+        "overviewStats": [
+            {
+                "name": "Total Transactions",
+                "value": monthlyTransactions.count(),
+            },
+            {
+                "name": "Total Spent",
+                "value": f"${totalSpent:.2f}",
+            },
+            {
+                "name": "Greater Than $100",
+                "value": greaterThan100,
+            },
+            {
+                "name": "Average Daily Spend",
+                "value": f"${averageDailySpend:.2f}",
+            },
+        ],
+    }
 
 
 @inertia("Budget/Transactions")
