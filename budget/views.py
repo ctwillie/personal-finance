@@ -1,4 +1,5 @@
 from datetime import date
+from django.db.models import F, Sum
 from inertia import inertia
 
 from budget.models import Transaction
@@ -12,36 +13,56 @@ def index(request):
 @inertia("Budget/Dashboard")
 def dashboard(request):
     today = date.today()
-    currentMonth = today.strftime("%B")
-    currentDate = today.strftime("%m/%d/%Y")
+    current_month = today.strftime("%B")
+    current_date = today.strftime("%m/%d/%Y")
 
-    monthlyTransactions = Transaction.objects.filter(
+    # Monthly Transaction Stats
+    monthly_transactions = Transaction.objects.filter(
         date__year=today.year, date__month=today.month, amount__gt=0
     )
-    totalSpent = sum([transaction.amount for transaction in monthlyTransactions])
-    greaterThan100 = monthlyTransactions.filter(amount__gt=100).count()
-    averageDailySpend = totalSpent / monthlyTransactions.count()
+    total_spend = sum([transaction.amount for transaction in monthly_transactions])
+    greater_than_100 = monthly_transactions.filter(amount__gt=100).count()
+    average_daily_spend = total_spend / today.day
+
+    # Monthly Category Stat
+    spend_by_category_results = (
+        Transaction.objects.filter(
+            date__year=today.year, date__month=today.month, amount__gt=0
+        )
+        .values(category_name=F("category__primary_name"))
+        .annotate(spend=Sum("amount"))
+        .order_by("-spend")
+    )
+
+    spend_by_category = list(spend_by_category_results.all())
+    for category in spend_by_category:
+        category_percentage = (category["spend"] / total_spend) * 100
+        formatted_category = category["category_name"].replace("_", " ").title()
+
+        category["value"] = float(category["spend"])
+        category["name"] = formatted_category + f" ({category_percentage:.2f}%)"
 
     return {
-        "currentDate": currentDate,
-        "currentMonth": currentMonth,
-        "monthlyTransactions": monthlyTransactions,
+        "currentDate": current_date,
+        "currentMonth": current_month,
+        "monthlyTransactions": monthly_transactions,
+        "monthlySpendByCategory": spend_by_category,
         "overviewStats": [
             {
                 "name": "Total Transactions",
-                "value": monthlyTransactions.count(),
+                "value": monthly_transactions.count(),
             },
             {
                 "name": "Total Spent",
-                "value": f"${totalSpent:.2f}",
+                "value": f"${total_spend:.2f}",
             },
             {
                 "name": "Greater Than $100",
-                "value": greaterThan100,
+                "value": greater_than_100,
             },
             {
                 "name": "Average Daily Spend",
-                "value": f"${averageDailySpend:.2f}",
+                "value": f"${average_daily_spend:.2f}",
             },
         ],
     }

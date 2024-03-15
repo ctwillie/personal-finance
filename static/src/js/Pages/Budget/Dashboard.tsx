@@ -1,9 +1,21 @@
-import React from "react";
+import { Stat, Transaction } from "@/types";
 
-// TODO: create a prop types
-export default function Dashboard(props) {
+import { Card, Title } from "@tremor/react";
+import SpendByCategoryBarList from "./Charts/SpendByCategoryBarList";
+
+type DashboardProps = {
+  currentDate: string;
+  currentMonth: string;
+  overviewStats: Stat[];
+  monthlyTransactions: Transaction[];
+  monthlySpendByCategory: Record<string, string>[];
+};
+
+export default function Dashboard(props: DashboardProps) {
+  const { monthlySpendByCategory } = props;
+
   return (
-    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div>
       <h1 className="text-2xl">Dashboard</h1>
       <br />
 
@@ -13,20 +25,28 @@ export default function Dashboard(props) {
       </h5>
 
       {/* Overview Stats */}
-      <div className="mx-auto max-w-2xl lg:max-w-none">
-        <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-          {props.overviewStats.map((stat, index) => (
-            <div key={index} className="flex flex-col bg-gray-400/5 p-8">
-              <dt className="text-sm font-semibold leading-6 text-gray-600">
-                {stat.name}
-              </dt>
-              <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900">
-                {stat.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
+      <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4 border">
+        {props.overviewStats.map((stat, index) => (
+          <div key={index} className="flex flex-col p-8">
+            <dt className="text-sm font-semibold leading-6 text-gray-600">
+              {stat.name}
+            </dt>
+            <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900">
+              {stat.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      {/* Spend By Category */}
+      <Card className="my-8 lg:w-1/2">
+        <Title className="pb-8">Spend By Category</Title>
+        <p className="flex justify-between text-gray-500 mb-3 text-sm">
+          <span>Category</span>
+          <span>Amount</span>
+        </p>
+        <SpendByCategoryBarList data={monthlySpendByCategory} />
+      </Card>
     </div>
   );
 }

@@ -54,6 +54,10 @@ export default defineConfig({
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx", ".json"],
+    alias: {
+      "@": resolve(__dirname, "./static/src/js"),
+      // "@components": resolve(__dirname, "./static/src/js/Components"),
+    },
   },
   esbuild: {
     loader: "tsx",

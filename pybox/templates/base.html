@@ -1,10 +1,9 @@
 {% load django_vite %}
 <!DOCTYPE html>
-<html class="h-full">
+<html class="h-full" className="antialiased">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>{% block title %}Pybox{% endblock %}</title>
     {% vite_hmr_client %}
 
@@ -19,7 +18,7 @@
     {% vite_asset 'js/main.tsx' %}
   </head>
 
-  <body class="h-screen w-screen">
-    <div class="container mx-auto pt-20">{% block inertia %}{% endblock %}</div>
+  <body>
+    {% block inertia %}{% endblock %}
   </body>
 </html>
