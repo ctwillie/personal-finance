@@ -2,6 +2,7 @@ import { Stat, Transaction } from "@/types";
 
 import { Card, Title } from "@tremor/react";
 import SpendByCategoryBarList from "./Charts/SpendByCategoryBarList";
+import TransactionsByDay from "./Charts/TransactionsByDay";
 
 type DashboardProps = {
   currentDate: string;
@@ -9,10 +10,11 @@ type DashboardProps = {
   overviewStats: Stat[];
   monthlyTransactions: Transaction[];
   monthlySpendByCategory: Record<string, string>[];
+  monthlyTransactionsByDay: Record<string, string>[];
 };
 
 export default function Dashboard(props: DashboardProps) {
-  const { monthlySpendByCategory } = props;
+  const { monthlySpendByCategory, monthlyTransactionsByDay } = props;
 
   return (
     <div>
@@ -39,13 +41,19 @@ export default function Dashboard(props: DashboardProps) {
       </dl>
 
       {/* Spend By Category */}
-      <Card className="my-8 lg:w-1/2">
+      <Card className="my-8 lg:w-1/2 !rounded-2xl">
         <Title className="pb-8">Spend By Category</Title>
         <p className="flex justify-between text-gray-500 mb-3 text-sm">
           <span>Category</span>
           <span>Amount</span>
         </p>
         <SpendByCategoryBarList data={monthlySpendByCategory} />
+      </Card>
+
+      {/* Transactions By Day */}
+      <Card className="my-8 !rounded-2xl">
+        <Title className="pb-8">Transactions By Day</Title>
+        <TransactionsByDay data={monthlyTransactionsByDay} />
       </Card>
     </div>
   );

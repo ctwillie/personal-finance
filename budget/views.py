@@ -1,5 +1,5 @@
 from datetime import date
-from django.db.models import F, Sum
+from django.db.models import Count, F, Sum
 from inertia import inertia
 
 from budget.models import Transaction
@@ -42,11 +42,26 @@ def dashboard(request):
         category["value"] = float(category["spend"])
         category["name"] = formatted_category + f" ({category_percentage:.2f}%)"
 
+    # Number of Transactions by Day
+    transactions_by_day_results = (
+        Transaction.objects.filter(
+            date__year=today.year, date__month=today.month, amount__gt=0
+        )
+        .values("date")
+        .annotate(total_transactions=Count("id"))
+        .order_by("date")
+    )
+    transactions_by_day = list(transactions_by_day_results.all())
+    for day in transactions_by_day:
+        day["date"] = day["date"].strftime("%m/%d")
+        day["Total Transactions"] = day["total_transactions"]
+
     return {
         "currentDate": current_date,
         "currentMonth": current_month,
         "monthlyTransactions": monthly_transactions,
         "monthlySpendByCategory": spend_by_category,
+        "monthlyTransactionsByDay": transactions_by_day,
         "overviewStats": [
             {
                 "name": "Total Transactions",
