@@ -11,7 +11,7 @@ export default function TransactionsByDay({ data }: TransactionsByDayProps) {
       data={data}
       index="date"
       categories={["Total Transactions"]}
-      colors={["indigo"]}
+      colors={["teal"]}
       yAxisWidth={60}
     />
   );

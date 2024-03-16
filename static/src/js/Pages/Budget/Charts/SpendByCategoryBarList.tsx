@@ -8,5 +8,7 @@ type SpendByCategoryBarListProps = {
 export default function SpendByCategoryBarList({
   data,
 }: SpendByCategoryBarListProps) {
-  return <BarList data={data} valueFormatter={currencyFormatter} />;
+  return (
+    <BarList data={data} color="teal" valueFormatter={currencyFormatter} />
+  );
 }
