@@ -1,3 +1,10 @@
 import { ValueFormatter } from "@tremor/react";
 
-export const currencyFormatter: ValueFormatter = (value: number) => `$${value}`;
+const USDollar = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+export const currencyFormatter: ValueFormatter = (value: number) => {
+  return USDollar.format(value);
+};

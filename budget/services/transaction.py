@@ -30,6 +30,21 @@ class TransactionService:
             category__detailed_name__in=self.exclude_category_detailed_names,
         )
 
+    def get_monthly_recent_transactions(self, limit=10):
+        recent_trasactions = (
+            Transaction.objects.filter(
+                date__year=self.today.year,
+                date__month=self.today.month,
+                amount__gt=0,
+            )
+            .annotate(category_name=F("category__detailed_name"))
+            .values("id", "amount", "date", "category_name")
+            .exclude(category__detailed_name__in=self.exclude_category_detailed_names)
+            .order_by("-date")[:limit]
+        )
+
+        return list(recent_trasactions)
+
     def get_monthly_spend_by_category(self):
         spend_by_category_results = (
             Transaction.objects.filter(
@@ -63,3 +78,20 @@ class TransactionService:
         )
 
         return list(transactions_by_day_results.all())
+
+    def get_monthly_transaction_amount_by_day(self):
+        transactions_by_day_results = (
+            Transaction.objects.filter(
+                date__year=self.today.year,
+                date__month=self.today.month,
+                amount__gt=0,
+            )
+            .exclude(
+                category__detailed_name__in=self.exclude_category_detailed_names,
+            )
+            .values("date")
+            .annotate(daily_amount=Sum("amount"))
+            .order_by("date")
+        )
+
+        return list(transactions_by_day_results)

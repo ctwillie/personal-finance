@@ -3,6 +3,8 @@ import { Stat, Transaction } from "@/types";
 import { Card, Title } from "@tremor/react";
 import SpendByCategoryBarList from "./Charts/SpendByCategoryBarList";
 import TransactionsByDay from "./Charts/TransactionsByDay";
+import TransactionAmountByDay from "./Charts/TransactionAmountByDay";
+import RecentTransactions from "./Charts/RecentTransactions";
 
 type DashboardProps = {
   currentDate: string;
@@ -11,6 +13,8 @@ type DashboardProps = {
   monthlyTransactions: Transaction[];
   monthlySpendByCategory: Record<string, string>[];
   monthlyTransactionsByDay: Record<string, string>[];
+  monthlyTransactionAmountByDay: Record<string, string>[];
+  monthlyRecentTransactions: Record<string, string>[];
   monthlyTotalTransactions: number;
 };
 
@@ -18,21 +22,15 @@ export default function Dashboard(props: DashboardProps) {
   const {
     monthlySpendByCategory,
     monthlyTransactionsByDay,
+    monthlyTransactionAmountByDay,
     monthlyTotalTransactions,
+    monthlyRecentTransactions,
   } = props;
 
   return (
     <div>
-      <h1 className="text-2xl">Dashboard</h1>
-      <br />
-
-      <h5 className="text-lg">
-        {props.currentMonth}{" "}
-        <span className="text-sm text-gray-500">({props.currentDate})</span>
-      </h5>
-
       {/* Overview Stats */}
-      <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4 border">
+      <dl className="grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4 border">
         {props.overviewStats.map((stat, index) => (
           <div key={index} className="flex flex-col p-8">
             <dt className="text-sm font-semibold leading-6 text-gray-600">
@@ -45,26 +43,44 @@ export default function Dashboard(props: DashboardProps) {
         ))}
       </dl>
 
-      {/* Spend By Category */}
-      <Card className="my-8 lg:w-1/2 !rounded-2xl">
-        <Title className="pb-8">Spend By Category</Title>
-        <p className="flex justify-between text-gray-500 mb-3 text-xs">
-          <span>Category</span>
-          <span>Amount</span>
-        </p>
-        <SpendByCategoryBarList data={monthlySpendByCategory} />
-      </Card>
+      <div className="grid lg:grid-cols-2 lg:gap-4">
+        {/* Spend By Category */}
+        <Card className="my-8 !rounded-2xl">
+          <Title className="pb-8">Spend By Category</Title>
+          <p className="flex justify-between text-gray-500 mb-3 text-xs">
+            <span>Category</span>
+            <span>Amount</span>
+          </p>
+          <SpendByCategoryBarList data={monthlySpendByCategory} />
+        </Card>
+
+        {/* Recent Transactions */}
+        <Card className="my-8 !rounded-2xl">
+          <Title className="pb-8">Recent Transactions</Title>
+          <RecentTransactions data={monthlyRecentTransactions} />
+        </Card>
+      </div>
 
       {/* Transactions By Day */}
-      <Card className="my-8 !rounded-2xl">
-        <Title className="pb-8">
-          Transactions By Day <br />
-          <span className=" ml-2 text-xs text-gray-500">
-            {monthlyTotalTransactions} total transactions
-          </span>
-        </Title>
-        <TransactionsByDay data={monthlyTransactionsByDay} />
-      </Card>
+      <div className="grid lg:grid-cols-2 lg:gap-4">
+        <Card className="my-8 !rounded-2xl">
+          <Title className="pb-8">
+            Transactions By Day <br />
+            <span className="ml-2 text-xs text-gray-500">
+              {monthlyTotalTransactions} total transactions
+            </span>
+          </Title>
+          <TransactionsByDay data={monthlyTransactionsByDay} />
+        </Card>
+
+        {/* Transactions Amount By Day */}
+        <Card className="my-8 !rounded-2xl">
+          <Title className="pb-8">
+            Amount Spent By Day <br />
+          </Title>
+          <TransactionAmountByDay data={monthlyTransactionAmountByDay} />
+        </Card>
+      </div>
     </div>
   );
 }

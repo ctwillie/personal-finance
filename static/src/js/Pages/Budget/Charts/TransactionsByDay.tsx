@@ -7,8 +7,8 @@ type TransactionsByDayProps = {
 export default function TransactionsByDay({ data }: TransactionsByDayProps) {
   return (
     <AreaChart
-      className="h-80"
       data={data}
+      className="h-80"
       index="date"
       categories={["Total Transactions"]}
       colors={["teal"]}
