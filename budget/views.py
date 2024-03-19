@@ -53,8 +53,9 @@ def dashboard(request):
     for recent_transaction in monthly_recent_transactions:
         recent_transaction["date"] = recent_transaction["date"].strftime("%-m/%d")
         recent_transaction["amount"] = float(recent_transaction["amount"])
+        category_name = recent_transaction["category_name"].replace("_", " ").title()
         recent_transaction["category_name"] = (
-            recent_transaction["category_name"].replace("_", " ").title()
+            category_name if len(category_name) <= 40 else category_name[:40] + "..."
         )
 
     return {

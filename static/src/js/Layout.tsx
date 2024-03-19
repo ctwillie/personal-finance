@@ -3,16 +3,22 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "@inertiajs/react";
 import classNames from "classnames";
 
-const navigation = [
-  { name: "Dashboard", href: "/budget", current: true },
-  { name: "Transactions", href: "/budget/transactions", current: false },
-];
-
 type LayoutProps = {
   children: React.ReactNode;
 };
 
+function isCurrentRoute(route: string) {
+  const pathname = window.location.pathname.replace(/\/$/, "");
+
+  return pathname === route.replace(/\/$/, "");
+}
+
 export default function Layout({ children }: LayoutProps) {
+  const navigation = [
+    { name: "Dashboard", href: "/budget/" },
+    { name: "Transactions", href: "/budget/transactions" },
+  ];
+
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="border-b border-gray-200 bg-white">
@@ -27,7 +33,7 @@ export default function Layout({ children }: LayoutProps) {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current
+                          isCurrentRoute(item.href)
                             ? "border-teal-500 text-gray-900"
                             : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                           "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
@@ -60,7 +66,7 @@ export default function Layout({ children }: LayoutProps) {
                     key={item.name}
                     href={item.href}
                     className={classNames(
-                      item.current
+                      isCurrentRoute(item.href)
                         ? "border-teal-500 bg-teal-50 text-teal-700"
                         : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
                       "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
