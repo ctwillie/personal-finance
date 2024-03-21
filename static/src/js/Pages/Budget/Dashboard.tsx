@@ -28,9 +28,9 @@ export default function Dashboard(props: DashboardProps) {
   } = props;
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 sm:gap-6 lg:gap-y-8">
       {/* Overview Stats */}
-      <dl className="grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4 border">
+      <dl className="grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4 border bg-white">
         {props.overviewStats.map((stat, index) => (
           <div key={index} className="flex flex-col p-8">
             <dt className="text-sm font-semibold leading-6 text-gray-600">
@@ -43,9 +43,9 @@ export default function Dashboard(props: DashboardProps) {
         ))}
       </dl>
 
-      <div className="grid lg:grid-cols-2 lg:gap-4">
+      <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {/* Spend By Category */}
-        <Card className="my-8 !rounded-2xl">
+        <Card className="!rounded-2xl">
           <Title className="pb-8">Spend By Category</Title>
           <p className="flex justify-between text-gray-500 mb-3 text-xs">
             <span>Category</span>
@@ -55,18 +55,18 @@ export default function Dashboard(props: DashboardProps) {
         </Card>
 
         {/* Recent Transactions */}
-        <Card className="my-8 !rounded-2xl">
+        <Card className="!rounded-2xl">
           <Title className="pb-8">Recent Transactions</Title>
           <RecentTransactions data={monthlyRecentTransactions} />
         </Card>
       </div>
 
       {/* Transactions By Day */}
-      <div className="grid lg:grid-cols-2 lg:gap-4">
-        <Card className="my-8 !rounded-2xl">
+      <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+        <Card className="!rounded-2xl">
           <Title className="pb-8">
             Transactions By Day <br />
-            <span className="ml-2 text-xs text-gray-500">
+            <span className="ml-1 text-xs text-gray-500">
               {monthlyTotalTransactions} total transactions
             </span>
           </Title>
@@ -74,7 +74,7 @@ export default function Dashboard(props: DashboardProps) {
         </Card>
 
         {/* Transactions Amount By Day */}
-        <Card className="my-8 !rounded-2xl">
+        <Card className="!rounded-2xl">
           <Title className="pb-8">
             Amount Spent By Day <br />
           </Title>

@@ -1,4 +1,4 @@
-import React from "react";
+import { Card, Title } from "@tremor/react";
 
 type Transaction = {
   id: number;
@@ -18,24 +18,14 @@ export default function Transactions({
   transactions,
 }: TransactionsProps) {
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Transactions
-          </h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all the transactions from your account including their
-            amount, category and date.
-          </p>
-        </div>
-        <div>
-          <p className="mt-2 text-sm text-gray-700">
-            Total Spent: {amountTotal}
-          </p>
-        </div>
-      </div>
-      <div className="mt-8 flow-root">
+    <Card className="!rounded-2xl">
+      <Title className="pb-8">
+        Transactions <br />
+        <span className="ml-1 text-xs text-gray-500">
+          Total Spent: {amountTotal}
+        </span>
+      </Title>
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <table className="min-w-full divide-y divide-gray-300">
@@ -89,6 +79,6 @@ export default function Transactions({
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

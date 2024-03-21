@@ -81,7 +81,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
       </Disclosure>
 
-      <div className="py-10">
+      <div className="py-4 sm:py-6 lg:py-8">
         <main>
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">{children}</div>
         </main>
