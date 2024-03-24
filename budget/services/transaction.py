@@ -13,6 +13,15 @@ class TransactionService:
             "TRANSFER_OUT_ACCOUNT_TRANSFER",
         ]
 
+    def get_transactions_index(self):
+        return (
+            Transaction.objects.annotate(category_name=F("category__detailed_name"))
+            .values("id", "amount", "date", "category_name")
+            .filter(amount__gt=0)
+            .order_by("-date")
+            .all()[:100]
+        )
+
     def get_monthly_income_transactions(self):
         return Transaction.objects.filter(
             date__year=self.today.year,
@@ -21,14 +30,24 @@ class TransactionService:
             category__primary_name="INCOME",
         )
 
-    def get_monthly_transactions(self):
-        return Transaction.objects.filter(
-            date__year=self.today.year,
-            date__month=self.today.month,
-            amount__gt=0,
-        ).exclude(
-            category__detailed_name__in=self.exclude_category_detailed_names,
+    def get_monthly_transactions(self, limit=None):
+        monthly_transactions = (
+            Transaction.objects.filter(
+                date__year=self.today.year,
+                date__month=self.today.month,
+                amount__gt=0,
+            )
+            .exclude(
+                category__detailed_name__in=self.exclude_category_detailed_names,
+            )
+            .annotate(categoryName=F("category__detailed_name"))
+            .values("id", "amount", "description", "date", "categoryName")
         )
+
+        if limit:
+            return list(monthly_transactions.all()[:limit])
+
+        return list(monthly_transactions.all())
 
     def get_monthly_recent_transactions(self, limit=10):
         recent_trasactions = (

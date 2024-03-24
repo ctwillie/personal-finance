@@ -1,6 +1,7 @@
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "@inertiajs/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import classNames from "classnames";
 
 type LayoutProps = {
@@ -14,6 +15,8 @@ function isCurrentRoute(route: string) {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const queryClient = new QueryClient();
+
   const navigation = [
     { name: "Dashboard", href: "/budget/" },
     { name: "Transactions", href: "/budget/transactions" },
@@ -83,7 +86,11 @@ export default function Layout({ children }: LayoutProps) {
 
       <div className="py-4 sm:py-6 lg:py-8">
         <main>
-          <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">{children}</div>
+          <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <QueryClientProvider client={queryClient}>
+              {children}
+            </QueryClientProvider>
+          </div>
         </main>
       </div>
     </div>

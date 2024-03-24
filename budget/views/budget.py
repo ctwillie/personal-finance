@@ -1,7 +1,6 @@
 from datetime import date
 from inertia import inertia
 
-from budget.models import Transaction
 from budget.services.transaction import TransactionService
 
 
@@ -26,7 +25,9 @@ def dashboard(request):
     gross_income = sum(
         [abs(transaction.amount) for transaction in monthly_income_transactions]
     )
-    total_expenses = sum([transaction.amount for transaction in monthly_transactions])
+    total_expenses = sum(
+        [transaction["amount"] for transaction in monthly_transactions]
+    )
     net_income = gross_income - total_expenses
 
     average_daily_spend = total_expenses / today.day
@@ -65,7 +66,7 @@ def dashboard(request):
         "monthlySpendByCategory": monthly_spend_by_category,
         "monthlyTransactionsByDay": monthly_transactions_by_day,
         "monthlyTransactionAmountByDay": monthly_transaction_amount_by_day,
-        "monthlyTotalTransactions": monthly_transactions.count(),
+        "monthlyTotalTransactions": len(monthly_transactions),
         "monthlyRecentTransactions": monthly_recent_transactions,
         "overviewStats": [
             {
@@ -85,36 +86,4 @@ def dashboard(request):
                 "value": f"${average_daily_spend:0,.2f}",
             },
         ],
-    }
-
-
-@inertia("Budget/Transactions")
-def transactions_index(request):
-    transactions_result = (
-        Transaction.objects.select_related("category")
-        .filter(amount__gt=0)
-        .order_by("-date")
-        .all()[:100]
-    )
-
-    amount_total = sum([transaction.amount for transaction in transactions_result])
-    transactions = []
-
-    # TODO: The loaded category is not sent in the serialized response
-    #      Investigate serializers and determine why the category is not being sent
-    #      In the meantime, I'm manually adding the categor.primary_name to the response
-    for transaction in transactions_result:
-        transactions.append(
-            {
-                "id": transaction.id,
-                "date": transaction.date,
-                "description": transaction.description,
-                "category": transaction.category.primary_name,
-                "amount": transaction.amount,
-            }
-        )
-
-    return {
-        "transactions": transactions,
-        "amountTotal": amount_total,
     }

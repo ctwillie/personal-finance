@@ -1,9 +1,10 @@
 from django.urls import path
-from . import views
+from .views import budget as budget_view, transactions as transactions_view
 
 app_name = "budget"
 
 urlpatterns = [
-    path("", views.dashboard, name="index"),
-    path("transactions", views.transactions_index, name="transactions.index"),
+    path("", budget_view.dashboard, name="index"),
+    path("transactions", transactions_view.index, name="transactions.index"),
+    path("transactions/list", transactions_view.list, name="transactions.list"),
 ]
